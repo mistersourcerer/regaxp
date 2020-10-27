@@ -27,5 +27,21 @@ RSpec.describe Regaxp::Eiruc do
 
       expect(eiruc.evaluate([2, 1, :-])).to eq 1
     end
+
+    context "multiple functions and precedence" do
+      before do
+        eiruc.fun("*") { |left, right| left * right }
+        eiruc.fun("-") { |left, right| left - right }
+        eiruc.fun("^") { |left, right| left ** right }
+        eiruc.fun("/") { |left, right| left / right }
+        eiruc.fun("+") { |left, right| left + right }
+      end
+
+      it "executes the expression correctly" do
+        expression = [3.0, 4.0, 2.0, :*, 1.0, 5.0, :-, 2.0, 3.0, :^, :^, :/, :+]
+
+        expect(eiruc.evaluate(expression)).to eq 3.0001220703125
+      end
+    end
   end
 end
