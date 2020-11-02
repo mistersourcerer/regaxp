@@ -1,4 +1,4 @@
-RSpec.describe Regaxp::Eiruc do
+RSpec.describe Regaxp::Eiruc::Evaler do
   subject(:eiruc) { described_class.new }
 
   describe "#fun, binds token to a function" do

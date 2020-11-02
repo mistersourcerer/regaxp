@@ -15,7 +15,7 @@
 # If a function is not registered the evaluator
 # fallsback to a method of the the left argument object.
 # If the method doesn't exist it will raise {UndefinedFun an error}.
-class Regaxp::Eiruc
+class Regaxp::Eiruc::Evaler
   def initialize
     @functions = {}
   end
@@ -49,7 +49,7 @@ class Regaxp::Eiruc
   # @raise [InvalidFun] if the `fun_object` is not a `#call(able)` thing
   def fun(name, fun_object = nil, &fun_body)
     body = fun_body || fun_object
-    raise InvalidFun.new(name) if !body.respond_to?(:call)
+    raise Regaxp::Eiruc::InvalidFun.new(name) if !body.respond_to?(:call)
 
     functions[name.to_sym] = body
   end
@@ -63,7 +63,7 @@ class Regaxp::Eiruc
     left = stack.pop
 
     if functions[operation].nil?
-      raise UndefinedFun.new(operation) if !left.respond_to?(operation)
+      raise Regaxp::Eiruc::UndefinedFun.new(operation) if !left.respond_to?(operation)
       left.public_send operation, right
     else
       functions[operation].call left, right
